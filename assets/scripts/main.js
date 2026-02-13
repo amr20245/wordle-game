@@ -123,6 +123,7 @@ async function submitGuess() {
   if (!isValid) {
     // Invalid word
     shakeRow(currentRow);
+        showMessage('Not a valid word');
     return;
   }
   // Compare guess with target
