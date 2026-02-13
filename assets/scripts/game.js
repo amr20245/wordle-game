@@ -36,7 +36,7 @@ const fallbackWords = [
 
 /**
  * Choose a random word from the API or fallback list.
- * @returns {Promise<string>} resolves to a 5-letter word
+ * @returns {Promise<string>} resolves to a 5‑letter word
  */
 async function getRandomWord() {
   const endpoint =
@@ -58,15 +58,36 @@ async function getRandomWord() {
 /**
  * Check if a word exists in the English dictionary. This uses an external
  * dictionary API. If the API fails, the function returns false for
- * non-fallback words. For demonstration we only check against the
+ * non‑fallback words. For demonstration we only check against the
  * fallback list to avoid excessive network calls during development.
  * @param {string} word
  * @returns {Promise<boolean>}
  */
 async function isWordValid(word) {
-  // Use fallback list for offline validation. In a production build you
-  // could call `https://api.dictionaryapi.dev/api/v2/entries/en/<word>`
-  // and check if it returns definitions.
+  /**
+   * Validate a guessed word against the dictionary API. The API
+   * (https://api.dictionaryapi.dev/api/v2/entries/en/<word>) returns an
+   * array of definitions when a word is valid. If the request fails or
+   * the word is not found, we fall back to checking our local list.
+   *
+   * @param {string} word The guessed word to validate
+   * @returns {Promise<boolean>} true if the word is valid
+   */
+  try {
+    const response = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+    );
+    if (response.ok) {
+      const data = await response.json();
+      // If the API returns a non-empty array, the word exists
+      if (Array.isArray(data) && data.length > 0) {
+        return true;
+      }
+    }
+  } catch (err) {
+    console.warn('Dictionary API failed; using fallback list', err);
+  }
+  // Fallback: check local list
   return fallbackWords.includes(word.toLowerCase());
 }
 
