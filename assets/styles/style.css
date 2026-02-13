@@ -1,0 +1,141 @@
+/*
+ * Base theme variables. These custom properties drive both the dark and light
+ * modes. To adjust colours globally, update these variables rather than
+ * sprinkling hex values throughout the stylesheet. The dark palette is set
+ * on :root while the light palette overrides them via the .light-mode class.
+ */
+:root {
+  --background-color: #0b1623;
+  --text-color: #f5f8ff;
+  --border-color: #3a3a3c;
+  --correct: #538d4e;
+  --misplaced: #b59f3b;
+  --wrong: #3a3a3c;
+}
+
+/* Light mode overrides */
+.light-mode {
+  --background-color: #f5f8ff;
+  --text-color: #0b1623;
+  --border-color: #d3d3d4;
+  --correct: #00cc66;
+  --misplaced: #ffcc00;
+  --wrong: #ff4d4d;
+}
+
+/* CSS reset for the game: remove default margins/padding */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* Position the mode toggle button in the top right corner */
+#mode-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+#mode-toggle:focus {
+  outline: none;
+}
+
+/* Game container positions the grid vertically centred */
+main#game {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 70vh;
+  padding-top: 2rem;
+}
+
+/* Wordle grid: 6 rows x 5 columns. We use CSS Grid to lay out the
+   letter boxes. */
+#wordle-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  grid-auto-rows: 60px;
+  gap: 8px;
+}
+
+/* Individual letter cell */
+.letter {
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.4rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+/* Colours for letter states */
+.letter.correct {
+  background-color: var(--correct);
+  color: #fff;
+  border-color: var(--correct);
+}
+
+.letter.misplaced {
+  background-color: var(--misplaced);
+  color: #fff;
+  border-color: var(--misplaced);
+}
+
+.letter.wrong {
+  background-color: var(--wrong);
+  color: #fff;
+  border-color: var(--wrong);
+}
+
+/* Simple animations using animate.css classes if loaded */
+.animate__bounceIn {
+  animation-duration: 0.5s;
+}
+
+/* Shake animation for invalid input */
+@keyframes shake {
+  10%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 80% {
+    transform: translateX(4px);
+  }
+  30%, 50%, 70% {
+    transform: translateX(-6px);
+  }
+  40%, 60% {
+    transform: translateX(6px);
+  }
+}
+
+.shake {
+  animation: shake 0.4s;
+}
